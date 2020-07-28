@@ -1,21 +1,18 @@
 class SchoolJob::Scraper
-    attr_accessor :title, :location, :description, :url
 
-    def self.scrape_jobs
-        jobs = []
-        jobs << self.scrape_jobs
-
-        jobs
-    end
-
-    def self.scrape_njschooljobs
+    def self.job_scrape
         doc = Nokogiri::HTML(open("https://www.njschooljobs.com/search"))
-        results = doc.css('div.listRow')
-        #puts results.count
-
-        results.each do |p|
-         puts p.css('div.title').text.strip
-        end
+        results = doc.css("div.listContainer")
+        
+        job = self.new
+        job.name = results.css("div.title").text
+        job.company = results.css("listColumn.company [1]").text.strip
+        job.location = results.css("listColumn.company [3]").text.strip
+        job.description = results.css("listColumn.abstract").text.strip
+        job.url = "https://njschooljobs.com" + results.css("a")[0].attribute("href").value
+            
+        job
+    
     end
 
 end

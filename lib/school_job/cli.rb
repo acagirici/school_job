@@ -16,13 +16,13 @@ class SchoolJob::CLI
     end
     
    def get_jobs
-        @jobs = SchoolJob::Job.all
+        @jobs = SchoolJob::Scraper.scrape_jobs_and_url
     end
 
     def list_jobs
         puts "\nChoose a Job to see details!\n"
         @jobs.each.with_index(1) do |job, i|
-            puts "#{i}. #{job.name}"
+            puts "#{i}. #{job.url}"
         end
     end
 

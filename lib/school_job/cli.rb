@@ -1,7 +1,13 @@
 class SchoolJob::CLI
-    
+    @@muted="\e[1;31m"
+    @@grn="\e[1;32m"
+    @@blu="\e[1;34m"
+    @@mag="\e[1;35m"
+    @@cyn="\e[1;36m"
+    @@white="\e[0m"
+
     def call
-        puts "\nWelcome to NJ Job\n"
+        puts "#{@@grn}\nWelcome to NJ Job\n#{@@white}"
         get_jobs
         list_jobs
         get_user_job
@@ -9,13 +15,13 @@ class SchoolJob::CLI
         #goodbye
     end
     
-    def get_jobs
+   def get_jobs
         @jobs = SchoolJob::Job.all
     end
 
     def list_jobs
         puts "\nChoose a Job to see details!\n"
-        @jobs.each.with_index(1) do |job, i| 
+        @jobs.each.with_index(1) do |job, i|
             puts "#{i}. #{job.name}"
         end
     end
@@ -32,19 +38,10 @@ class SchoolJob::CLI
 
     def show_description(chosen_job)
         job = @jobs[chosen_job - 1]
-        puts "This is the description for #{job}"
+        puts "This is the description for #{job.name}"
             #SchoolJob::Job.all.each.with_index(1) do | job |
             #puts job.name
         #end
         #get_user_job
     end
- #   def job_list
-  #      puts "Recently Posted School Job Listings:"
-   #     @jobs = SchoolJob::Scraper.scrape_jobs
-    #    @jobs.each.with_index(1) do |job, i| 
-     #       puts "#{i}. #{job.name} - #{job.location}"
-      #  end
-       
-   # end
-   
 end

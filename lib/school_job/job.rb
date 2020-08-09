@@ -1,18 +1,18 @@
 class SchoolJob::Job
+    attr_accessor :name
+
     @@all = []
-    attr_accessor :name, # :company, :location, :description, :url
-    
+
     def initialize(name)
         @name = name
-        save
+        @@all << self
     end
-
+    
     def self.all
+        SchoolJob::Scraper.scrape_jobs if @@all.empty?
         @@all
     end
 
-    def save
-        @@all << self
-    end
-
 end
+
+

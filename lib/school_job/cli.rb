@@ -7,41 +7,65 @@ class SchoolJob::CLI
     @@white="\e[0m"
 
     def call
-        puts "#{@@grn}\nWelcome to NJ Job\n#{@@white}"
-        get_jobs
-        list_jobs
-        get_user_job
-        #menu
-        #goodbye
+        puts "#{@@grn}\nWelcome to NJ Job - Your Daily Job Listings for School Jobs in New Jersey\n#{@@white}"
+        menu
     end
     
+    def menu
+        puts "Below is a list of the most recent job listings"
+        get_jobs
+        list_jobs
+        puts "#{@@cyn}\nChoose the number of the job to get more information\n#{@@white}"
+        get_user_job
+    end
+
    def get_jobs
-        @jobs = SchoolJob::Scraper.scrape_jobs_and_url
+        jobs = SchoolJob::Scraper.scrape_jobs_and_url
     end
 
     def list_jobs
-        puts "\nChoose a Job to see details!\n"
-        @jobs.each.with_index(1) do |job, i|
-            puts "#{i}. #{job.url}"
+        SchoolJob::Job.all.each.with_index(1) do |job, i|
+            puts "#{i}. #{job.name}"
         end
     end
 
     def get_user_job
         chosen_job = gets.strip.to_i
-        show_description(chosen_job) if valid_input(chosen_job, @jobs)
-            
+        max = SchoolJob::Job.all.length
+        if chosen_job.between?(1,max)
+            job = SchoolJob::Job.all[chosen_job-1]
+            show_details(job)
+        else 
+            puts "Please put in a valid input"
+            get_user_job
+        end
     end
 
-    def valid_input(input, data)
-        input.to_i <= data.length && input.to_i > 0
+    def show_details(job)
+        SchoolJob::Scraper.scrape_job_details(job)
+        puts "Here are the details for #{job.name}"
+        job.details.each do |detail|
+            puts "#{@@muted} + Job Location: #{detail.location} | Employer: #{detail.company}#{@@white}"
+            puts "#{@@blu} + Job Post Date: #{detail.post_date} | Deadline to Apply: #{detail.apply_by_date} #{@@white}"
+        end
+        second_menu
     end
 
-    def show_description(chosen_job)
-        job = @jobs[chosen_job - 1]
-        puts "This is the description for #{job.name}"
-            #SchoolJob::Job.all.each.with_index(1) do | job |
-            #puts job.name
-        #end
-        #get_user_job
+    def second_menu
+        puts "\n Would you like to read the description? Type 'Y'"
+        puts "\n To return to the main menu, Type 'B'"
+        puts "\n If you would like to exit, Type 'E'"
+        input = gets.strip.upcase
+        if input == "Y"
+                puts "\n DETAILS \n #{detail.description}"
+                puts "TO APPLY GO TO #{job.url}"
+            elsif input == "B"
+                menu
+            elsif input == "E"
+                puts "Goodbye!"
+            else
+                puts "Sorry, I could not understand that command"
+                show_details(job)
+        end
     end
 end

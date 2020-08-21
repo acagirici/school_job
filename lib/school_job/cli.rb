@@ -41,31 +41,46 @@ class SchoolJob::CLI
         end
     end
 
+    def scrape_details
+        details = SchoolJob::Scraper.scrape_job_details(job)
+    end
+
     def show_details(job)
         SchoolJob::Scraper.scrape_job_details(job)
         puts "Here are the details for #{job.name}"
         job.details.each do |detail|
             puts "#{@@muted} + Job Location: #{detail.location} | Employer: #{detail.company}#{@@white}"
             puts "#{@@blu} + Job Post Date: #{detail.post_date} | Deadline to Apply: #{detail.apply_by_date} #{@@white}"
+
+            puts "#{@@grn}\n To read the description? Type 'Y'"
+            puts "\n To return to the main menu, Type 'B'"
+            puts "\n If you would like to exit, Type 'E' #{@@white}"
+            input = gets.strip.upcase
+                if input == "Y"
+                    puts "\n DETAILS \n #{detail.description}"
+                    puts "TO APPLY GO TO #{job.url}"
+                    second_menu
+                elsif input == "B"
+                    menu
+                elsif input == "E"
+                    puts "Thank you for using School Job. Goodbye!"
+                else
+                    puts "Sorry, I could not understand that command"
+                    second_menu
+                end
         end
-        second_menu
     end
 
     def second_menu
-        puts "\n Would you like to read the description? Type 'Y'"
-        puts "\n To return to the main menu, Type 'B'"
-        puts "\n If you would like to exit, Type 'E'"
-        input = gets.strip.upcase
-        if input == "Y"
-                puts "\n DETAILS \n #{detail.description}"
-                puts "TO APPLY GO TO #{job.url}"
-            elsif input == "B"
-                menu
-            elsif input == "E"
-                puts "Goodbye!"
-            else
-                puts "Sorry, I could not understand that command"
-                show_details(job)
-        end
+            puts "#{@@mag}\nWhat would you lke to do next? Type 'M' for Menu or 'E' to Exit#{@@white}"
+                input = gets.strip.upcase
+                if input == "M"
+                    menu
+                elsif input == "E"
+                    puts "Thank you for using School Job. Goodbye!"
+                else
+                    puts "Sorry, I could not understand that command. Redirecting to Menu!"
+                end
     end
+
 end

@@ -41,25 +41,24 @@ class SchoolJob::CLI
         end
     end
 
-    def scrape_details
-        details = SchoolJob::Scraper.scrape_job_details(job)
-    end
-
     def show_details(job)
-        SchoolJob::Scraper.scrape_job_details(job)
+        #detail = SchoolJob::Scraper.scrape_job_details(job)
         puts "Here are the details for the #{job.name} job"
-        job.details.each do |detail|
-            puts "#{@@muted} + Job Location: #{detail.location} | Employer: #{detail.company}#{@@white}"
-            puts "#{@@blu} + Job Post Date: #{detail.post_date} | Deadline to Apply: #{detail.apply_by_date} #{@@white}"
+        SchoolJob::Scraper.scrape_job_details(job)
+            puts "#{@@muted} + Job Location: #{job.location} | Employer: #{job.company}#{@@white}"
+            puts "#{@@blu} + Job Post Date: #{job.post_date} | Deadline to Apply: #{job.apply_by_date} #{@@white}"
 
             puts "#{@@grn}\n To read the description? Type 'Y'"
+            puts "\n To go to the application link, Type 'A'"
             puts "\n To return to the main menu, Type 'B'"
             puts "\n If you would like to exit, Type 'E' #{@@white}"
             input = gets.strip.upcase
                 if input == "Y"
-                    puts "\n DETAILS \n #{detail.description}"
-                    puts "#{@@grn}TO APPLY GO TO #{job.url}#{@@white}"
+                    puts "\n DETAILS \n #{job.description}"
+                    #puts "#{@@grn}TO APPLY GO TO #{job.url}#{@@white}"
                     second_menu
+                elsif input == "A"
+                    system("open #{job.url}")
                 elsif input == "B"
                     menu
                 elsif input == "E"
@@ -68,7 +67,6 @@ class SchoolJob::CLI
                     puts "Sorry, I could not understand that command"
                     second_menu
                 end
-        end
     end
 
     def second_menu
@@ -80,7 +78,7 @@ class SchoolJob::CLI
                     puts "Thank you for using School Job. Goodbye!"
                 else
                     puts "Sorry, I could not understand that command. Redirecting to Menu!"
+                    menu
                 end
     end
-
 end

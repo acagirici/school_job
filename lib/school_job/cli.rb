@@ -42,7 +42,6 @@ class SchoolJob::CLI
     end
 
     def show_details(job)
-        #detail = SchoolJob::Scraper.scrape_job_details(job)
         puts "Here are the details for the #{job.name} job"
         SchoolJob::Scraper.scrape_job_details(job)
             puts "#{@@muted} + Job Location: #{job.location} | Employer: #{job.company}#{@@white}"
@@ -55,7 +54,6 @@ class SchoolJob::CLI
             input = gets.strip.upcase
                 if input == "Y"
                     puts "\n DETAILS \n #{job.description}"
-                    #puts "#{@@grn}TO APPLY GO TO #{job.url}#{@@white}"
                     second_menu
                 elsif input == "A"
                     system("open #{job.url}")

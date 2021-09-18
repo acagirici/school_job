@@ -19,6 +19,12 @@ class SchoolJob::CLI
         get_user_job
     end
 
+    def menu_two
+        puts "Welcome back to the main menu"
+        list_jobs
+        get_user_job
+    end
+
    def get_jobs
         jobs = SchoolJob::Scraper.scrape_jobs_and_url
     end
@@ -58,7 +64,7 @@ class SchoolJob::CLI
                 elsif input == "A"
                     system("open #{job.url}")
                 elsif input == "B"
-                    menu
+                    menu_two
                 elsif input == "E"
                     puts "Thank you for using School Job. Goodbye!"
                 else
@@ -71,12 +77,12 @@ class SchoolJob::CLI
             puts "#{@@mag}\nWhat would you lke to do next? Type 'M' for Menu or 'E' to Exit#{@@white}"
                 input = gets.strip.upcase
                 if input == "M"
-                    menu
+                    menu_two
                 elsif input == "E"
                     puts "Thank you for using School Job. Goodbye!"
                 else
                     puts "Sorry, I could not understand that command. Redirecting to Menu!"
-                    menu
+                    menu_two
                 end
     end
 end
